@@ -1,3 +1,8 @@
+/*
+ * Author: Kateryna Astashenkova
+ * Date: 2026-05-26
+ * File: CollectSourceCodeMojo.java
+ */
 package org.example;
 
 import java.io.BufferedWriter;
@@ -16,50 +21,41 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+/**
+ * Class {@code CollectSourceCodeMojo}.
+ */
 @Mojo(name = "collect-source-code")
 public class CollectSourceCodeMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
-    @Parameter(
-            property = "outputFile",
-            defaultValue = "${project.build.directory}/collected-source-code.java"
-    )
+    @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/collected-source-code.java")
     private File outputFile;
 
+    /**
+     * Method {@code execute}.
+     */
     @Override
     public void execute() throws MojoExecutionException {
         List<String> sourceRoots = project.getCompileSourceRoots();
-
         try {
             Files.createDirectories(outputFile.toPath().getParent());
         } catch (IOException e) {
-            throw new MojoExecutionException("Cannot create directory: "
-                    + outputFile.getAbsolutePath(), e);
+            throw new MojoExecutionException("Cannot create directory: " + outputFile.getAbsolutePath(), e);
         }
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-
             for (String sourceRoot : sourceRoots) {
                 Path rootPath = Paths.get(sourceRoot);
-
                 if (!Files.exists(rootPath)) {
                     continue;
                 }
-
                 try (Stream<Path> walk = Files.walk(rootPath)) {
-                    List<Path> javaFiles = walk
-                            .filter(p -> p.toString().endsWith(".java"))
-                            .sorted()
-                            .toList();
-
+                    List<Path> javaFiles = walk.filter(p -> p.toString().endsWith(".java")).sorted().toList();
                     for (int i = 0; i < javaFiles.size(); i++) {
                         Path javaFile = javaFiles.get(i);
-                        writer.write("// FILE #" + (i + 1) + ": "
-                                + rootPath.relativize(javaFile));
+                        writer.write("// FILE #" + (i + 1) + ": " + rootPath.relativize(javaFile));
                         writer.newLine();
-
                         try (Stream<String> lines = Files.lines(javaFile)) {
                             lines.forEach(line -> {
                                 try {
@@ -73,13 +69,11 @@ public class CollectSourceCodeMojo extends AbstractMojo {
                         writer.newLine();
                     }
                 } catch (IOException e) {
-                    throw new MojoExecutionException(
-                            "Error processing source root: " + sourceRoot, e);
+                    throw new MojoExecutionException("Error processing source root: " + sourceRoot, e);
                 }
             }
         } catch (IOException e) {
-            throw new MojoExecutionException(
-                    "Error writing to output file: " + outputFile, e);
+            throw new MojoExecutionException("Error writing to output file: " + outputFile, e);
         }
     }
 }
