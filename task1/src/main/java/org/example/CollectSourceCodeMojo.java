@@ -17,7 +17,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 @Mojo(name = "collect-source-code")
-public class CollectSourceCode extends AbstractMojo {
+public class CollectSourceCodeMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
