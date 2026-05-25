@@ -66,7 +66,8 @@ public class AddHeaderMojo extends AbstractMojo {
                 // header exists
                 return;
             }
-            String header = String.format("/*%n" + " * Author: %s%n" + " * Date: %s%n" + " * File: %s%n" + " */%n", author, date, javaFile.getFileName());
+            String header = String.format("/*%n" + " * Author: %s%n" + " * Date: %s%n" + " * File: %s%n" + " */%n",
+                    author, date, javaFile.getFileName());
             Files.writeString(javaFile, header + content);
             getLog().info("Header added: " + javaFile.getFileName());
         } catch (IOException e) {
