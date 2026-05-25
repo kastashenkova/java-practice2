@@ -14,17 +14,39 @@
     <plugins>
         <plugin>
             <groupId>org.example</groupId>
-            <artifactId>Java_Hometask2</artifactId>
+            <artifactId>Java_Hometask2</artifactId> # або task1/task2
             <version>1.0-SNAPSHOT</version>
         </plugin>
     </plugins>
 </build>
 ```
 3. Запустити через PowerShell
-- Плагін **collect-source-code**: `mvn org.example:Java_Hometask2:1.0-SNAPSHOT:collect-source-code` or `mvn custom-plugin:collect-source-code`
+- Плагін **collect-source-code**:
+  ```
+  mvn org.example:task1:1.0-SNAPSHOT:collect-source-code
+  ```
+  або
+  
+  ```
+  mvn custom-plugin-1:collect-source-code
+  ```
 - Плагін **comments-generation**:
-   1. `mvn org.example:Java_Hometask2:1.0-SNAPSHOT:add-headers -Dauthor="Kateryna Astashenkova"` (ваше ім'я тут)
-   2. `mvn org.example:Java_Hometask2:1.0-SNAPSHOT:comments-generation` or `mvn custom-plugin:comments-generation`
+   1. ```
+      mvn org.example:task2:1.0-SNAPSHOT:add-headers -Dauthor="Kateryna Astashenkova"
+      ```
+      або
+      
+      ```
+      mvn custom-plugin-2:add-headers -Dauthor="Kateryna Astashenkova" # ваше ім'я тут
+      ```
+   3. ```
+      mvn org.example:task2:1.0-SNAPSHOT:generate-comments
+      ```
+      або
+      
+      ```
+      mvn custom-plugin-2:generate-comments
+      ```
 
 ## Приклади результатів
 - Для завдання 1 результат — згенерований файл `target/collected-source-code.java`, завантажений у репозиторій.
